@@ -65,7 +65,7 @@ class ReadingsHttpUploader
         result += (WiFi.localIP().toString());
         result += "\", ";
 
-        result += "\"ssid\": \"";
+        result += "\"wifi-ssid\": \"";
         result += (WiFi.SSID());
         result += "\", ";
 
