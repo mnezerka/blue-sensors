@@ -24,8 +24,4 @@
 
 #define PUSH_AES_BUFFER_SIZE 1024
 
-#define ENABLE_DUMMY_SENSOR 1
-
-//#define ENABLE_DALLAS_SENSORS 1
-
 #endif
