@@ -1,6 +1,64 @@
 # Blue Sensors
 Implementation of simple sensors (e.g. temperature) reader and publisher
 
+## Boards 
+
+All boards are based on ESP8266 chip.
+
+https://www.aliexpress.com/item/1pcs-V3-4M-4FLASH-NodeMcu-Lua-WIFI-Networking-development-board-Based-ESP8266/32787382982.html?spm=a2g0s.9042311.0.0.1w6xrw
+
+https://www.aliexpress.com/item/D1-mini-V1-Mini-NodeMcu-4M-bytes-Lua-WIFI-Internet-of-Things-development-board-based-ESP8266/32787418018.html?spm=a2g0s.9042311.0.0.1w6xrw
+
+## Peripherials 
+
+This is list of supported devices that can be connected and configured via build flags.
+
+### Temperature Sensor Dallas (DS18B20)
+One Wire digital temperature sensor from Maxim IC. Reports degrees C with 9 to
+12-bit precision, measures temperature from -55C to 125C, accuracty from -10C
+to +85C is +/-0.5C. Each sensor has a unique 64-Bit Serial number etched into
+it - allows for a huge number of sensors to be used on one data bus. 
+
+https://www.aliexpress.com/item/100-New-and-original-DALLAS-DS18B20-TO-92-IC-free-shipping/1327754867.html?spm=a2g0s.9042311.0.0.1w6xrw
+
+```
+
+               _____
+              /     \   
+             /       \   
+            +---------+
+            |         |
+            |         |
+            |         |
+            +---------+
+             |   |   |
+         GND |   |   | VCC
+             | DATA  |
+             |   |   |
+```
+
+
+
+### Waterproof Temperature Sensor Dallas (DS18B20) 
+Stainless Steel Package 1 Meters Waterproof DS18b20 Temperature Probe Temperature Sensor 18B20
+https://www.aliexpress.com/item/Stainless-Steel-Package-1-Meters-Waterproof-DS18b20-Temperature-Probe-Temperature-Sensor-18B20/32359386131.html?spm=a2g0s.9042311.0.0.1w6xrw
+
+```
+                                       +--------------+
+        --- red --------+--------------+  waterproof  |
+        --- yellow -----|  cable (1m)  |  DS18B20     |
+        --- green  -----+--------------+              |
+                                       +---------------
+```
+
+### LCD I2C Display
+
+https://www.aliexpress.com/item/IIC-I2C-TWI-Serial-LCD-2004-20x4-Display-Shield-Blue-Backlight-for-Arduino-Free-Shipping/32599904427.html?spm=a2g0s.9042311.0.0.1w6xrw
+
+### OLED ICC Display
+
+https://www.aliexpress.com/item/1pcs-Free-Shipping-White-Blue-White-and-Blue-color-0-96-inch-128X64-OLED-Display-Module/32717950155.html?spm=a2g0s.9042311.0.0.1w6xrw
+
 ## Build Variants
 It is possible to configure buld variant via build flags. 
 
