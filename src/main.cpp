@@ -9,6 +9,7 @@
 #include "SerialWriter.h"
 #include "ReadingsHttpUploader.h"
 #include "Lcd.h"
+#include "DisplayOLED.h"
 #include "Sensors.h"
 #include "SensorDallas.h"
 #include "SensorDummy.h"
@@ -27,6 +28,9 @@ ReadingsHttpUploader readingsHttpUploader;
 
 // Instance LCD display
 Lcd lcd;
+
+// Instance of OLED display
+DisplayOLED oled;
 
 // Instance of sensors management
 Sensors sensors;
@@ -54,6 +58,7 @@ void setup(void)
     // init device state listeners
     DeviceState::getInstance().addListener(&serialWriter);
     DeviceState::getInstance().addListener(&lcd);
+    DeviceState::getInstance().addListener(&oled);
     DeviceState::getInstance().begin();
 
   // init all sensors
@@ -101,4 +106,6 @@ void takeReadings()
     readingsHttpUploader.processReadings(sensors);
 
     lcd.processReadings(sensors);
+
+    oled.processReadings(sensors);
 }
