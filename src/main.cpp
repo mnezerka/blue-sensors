@@ -13,6 +13,7 @@
 #include "Sensors.h"
 #include "SensorDallas.h"
 #include "SensorDummy.h"
+#include "TimeProvider.h"
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -52,6 +53,7 @@ ThermoHttpServer httpServer(&sensors);
 
 void takeReadings();
 void handleHttpClient();
+void handleDeviceState();
 
 void setup(void)
 {
@@ -61,7 +63,10 @@ void setup(void)
     DeviceState::getInstance().addListener(&oled);
     DeviceState::getInstance().begin();
 
-  // init all sensors
+    // init time provider
+    TimeProvider::getInstance().begin();
+
+    // init all sensors
 #ifdef ENABLE_DALLAS_SENSORS
     sensors.addSensor(&dallas);
 #endif
@@ -82,18 +87,26 @@ void setup(void)
     DeviceState::getInstance().state("Control loop");
     t.every(INTERVAL_READINGS, takeReadings);
     t.every(100, handleHttpClient);
+    t.every(800, handleDeviceState);
 }
 
 //////////////////////////// LOOP /////////////////////////////
 
 void loop(void)
 { 
+    TimeProvider::getInstance().update();
+
     t.update();
 }
 
 void handleHttpClient()
 {
     httpServer.handleClient();
+}
+
+void handleDeviceState()
+{
+    DeviceState::getInstance().update();
 }
 
 void takeReadings()

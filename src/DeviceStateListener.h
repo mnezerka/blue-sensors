@@ -6,10 +6,10 @@
 class DeviceStateListener
 {
   public:
-
-  virtual void begin() { };
-  virtual void state(String state) { };
-  virtual void debug(String msg) { };
+      virtual void begin() { };
+      virtual void state(String state) { };
+      virtual void debug(String msg) { };
+      virtual void update() { };
 };
 
 #endif

@@ -1,16 +1,7 @@
 #ifndef WIFICONNECTIVITY_H
 #define WIFICONNECTIVITY_H
 
-#include <Ethernet.h>
-//#include <ESP8266WiFiAP.h>
-//#include <ESP8266WiFiScan.h>
-//#include <WiFiClient.h>
-//#include <WiFiClientSecure.h>
-//#include <ESP8266WiFi.h>
-//#include <WiFiServer.h>
-//#include <ESP8266WiFiGeneric.h>
-//#include <ESP8266WiFiMulti.h>
-//#include <ESP8266WiFiType.h>
+//#include <Ethernet.h>
 #include <WiFiManager.h>
 #include "DeviceState.h"
 

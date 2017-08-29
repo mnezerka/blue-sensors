@@ -66,6 +66,17 @@ class DeviceState
         listener->debug(msg);
       }
     }
+
+    void update()
+    {
+        DeviceStateListener *listener;
+    
+        for(int i = 0; i < myListeners.size(); i++)
+        {
+            listener = myListeners.get(i);
+            listener->update();
+        }
+    }
 };
 
 #endif
