@@ -14,7 +14,7 @@ class ReadingsHttpUploader
 {
     public:
 
-    void processReadings(Sensors &sensors)
+    void processReadings()
     {
         HTTPClient http;
         //String url = "http://blue.pavoucek.cz";
@@ -29,7 +29,7 @@ class ReadingsHttpUploader
         DeviceState::getInstance().debug(logPrefix + "POST to " + url);
 
         //int httpCode = http.POST(encodePayload(readings2Json(sensors)));
-        int httpCode = http.POST(readings2Json(sensors));
+        int httpCode = http.POST(readings2Json());
 
         // httpCode will be negative on error
         if(httpCode > 0)
@@ -53,7 +53,7 @@ class ReadingsHttpUploader
 
     private:
 
-    String readings2Json(Sensors &sensors)
+    String readings2Json()
     {
         String result = "";
         result += "{";
@@ -76,9 +76,9 @@ class ReadingsHttpUploader
         result += "\"readings\": [";
     
         // get all sensor readings and generate appropriate HTML representation
-        for(int i = 0; i < sensors.getSensors()->size(); i++)
+        for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
-            Sensor *sensor = sensors.getSensors()->get(i);
+            Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             bool readingCounter = 0;
             while (reading->value != Reading::VALUE_LAST)

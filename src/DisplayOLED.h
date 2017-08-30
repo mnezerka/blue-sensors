@@ -20,6 +20,7 @@ class DisplayOLED: public DeviceStateListener
 		String lastState;
 		unsigned long lastScreenChange;
 		unsigned int screen = 0;
+
     public:
 
     DisplayOLED()
@@ -50,12 +51,12 @@ class DisplayOLED: public DeviceStateListener
 		lastState = state;
     }
 
-    void processReadings(Sensors &sensors)
+    void processReadings()
     {
         // get all sensor readings and generate appropriate HTML representation
-        for(int i = 0; i < sensors.getSensors()->size(); i++)
+        for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
-            Sensor *sensor = sensors.getSensors()->get(i);
+            Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             bool readingCounter = 1;
             while (reading->value != Reading::VALUE_LAST)

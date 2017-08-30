@@ -12,15 +12,13 @@ class ThermoHttpServer : public RequestHandler
     private:
 
     ESP8266WebServer *httpServer = NULL;
-    Sensors *sensors = NULL;
     String hostName;
     
     public:
 
-    ThermoHttpServer(Sensors *sensors): RequestHandler()
+    ThermoHttpServer(): RequestHandler()
     {
       this->hostName = "thermo";
-      this->sensors = sensors;
       httpServer = new ESP8266WebServer(80);
     }
 
@@ -90,9 +88,9 @@ class ThermoHttpServer : public RequestHandler
         info += ("<br />");
 
         // get all sensor readings and generate appropriate HTML representation
-        for(int i = 0; i < this->sensors->getSensors()->size(); i++)
+        for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
-          Sensor *sensor = this->sensors->getSensors()->get(i);
+          Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
           Reading* reading = sensor->getReadings();
           while (reading->value != Reading::VALUE_LAST)
           {

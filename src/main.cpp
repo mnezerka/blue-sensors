@@ -33,9 +33,6 @@ Lcd lcd;
 // Instance of OLED display
 DisplayOLED oled;
 
-// Instance of sensors management
-Sensors sensors;
-
 // Instance of Dallas sensor interface
 #ifdef ENABLE_DALLAS_SENSORS
 SensorDallas dallas(&oneWire);
@@ -49,7 +46,7 @@ SensorDummy dummy;
 WifiConnectivity wifiConnectivity;
 
 // Instance of the simple web server
-ThermoHttpServer httpServer(&sensors);
+ThermoHttpServer httpServer;
 
 void takeReadings();
 void handleHttpClient();
@@ -68,14 +65,14 @@ void setup(void)
 
     // init all sensors
 #ifdef ENABLE_DALLAS_SENSORS
-    sensors.addSensor(&dallas);
+    Sensors::getInstance().addSensor(&dallas);
 #endif
 
 #ifdef ENABLE_DUMMY_SENSOR 
-    sensors.addSensor(&dummy);
+    Sensors::getInstance().addSensor(&dummy);
 #endif
 
-    sensors.begin();
+    Sensors::getInstance().begin();
 
     // init wifi manager
     wifiConnectivity.begin();
@@ -112,13 +109,13 @@ void handleDeviceState()
 void takeReadings()
 {
     // take readings of all registered sensors
-    sensors.takeReadings();
+    Sensors::getInstance().takeReadings();
 
-    serialWriter.processReadings(sensors);
+    serialWriter.processReadings();
 
-    readingsHttpUploader.processReadings(sensors);
+    readingsHttpUploader.processReadings();
 
-    lcd.processReadings(sensors);
+    lcd.processReadings();
 
-    oled.processReadings(sensors);
+    oled.processReadings();
 }

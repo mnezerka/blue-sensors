@@ -45,15 +45,15 @@ class Lcd: public DeviceStateListener
       lcd->print(state);
     }
 
-    void processReadings(Sensors &sensors)
+    void processReadings()
     {
         lcd->clear();
         lcd->home();
 
         // get all sensor readings and generate appropriate HTML representation
-        for(int i = 0; i < sensors.getSensors()->size(); i++)
+        for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
-            Sensor *sensor = sensors.getSensors()->get(i);
+            Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             bool readingCounter = 0;
             while (reading->value != Reading::VALUE_LAST)

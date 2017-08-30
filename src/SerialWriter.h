@@ -25,12 +25,12 @@ class SerialWriter: public DeviceStateListener
         Serial.println(msg);
     }
 
-    void processReadings(Sensors &sensors)
+    void processReadings()
     {
         // get all sensor readings and generate appropriate HTML representation
-        for(int i = 0; i < sensors.getSensors()->size(); i++)
+        for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
-            Sensor *sensor = sensors.getSensors()->get(i);
+            Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             while (reading->value != Reading::VALUE_LAST)
             {
