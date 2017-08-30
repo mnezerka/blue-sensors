@@ -49,6 +49,7 @@ class DisplayOLED: public DeviceStateListener
     void state(String state)
     {
 		lastState = state;
+        update();
     }
 
     void processReadings()
@@ -90,6 +91,7 @@ class DisplayOLED: public DeviceStateListener
 
 		switch (screen)
 		{
+            // status screen
 			case 0:
 				oled->setTextAlignment(TEXT_ALIGN_LEFT);
 
@@ -97,14 +99,55 @@ class DisplayOLED: public DeviceStateListener
 				oled->drawString(0, 10, "State: " + lastState);
 
 				// wifi information
-				oled->drawString(0, 20, "Wifi: " + WiFi.SSID());
-				oled->drawString(0, 30, "IP: " + WiFi.localIP().toString());
-				oled->drawString(0, 40, "Wifi strength: " + String(WiFi.RSSI()) + " dBm");
+                switch (WiFi.status())
+                {
+                    case WL_IDLE_STATUS:
+				        oled->drawString(0, 20, "Wifi: Idle");
+                        break;
+                    case WL_NO_SSID_AVAIL: 
+				        oled->drawString(0, 20, "Wifi: Not reachable");
+                        break;
+                    case WL_CONNECTED:
+                        oled->drawString(0, 20, "Wifi: " + WiFi.SSID());
+                        oled->drawString(0, 30, "IP: " + WiFi.localIP().toString());
+                        oled->drawString(0, 40, "Wifi strength: " + String(WiFi.RSSI()) + " dBm");
+                        break;
+                    case WL_CONNECT_FAILED:
+				        oled->drawString(0, 20, "Wifi: Wrong password");
+                        break;
+                    case WL_DISCONNECTED:
+				        oled->drawString(0, 20, "Wifi: No client mode");
+                }
+
 				break;
 
+            // meter readings screen
 			case 1:
 				oled->setTextAlignment(TEXT_ALIGN_LEFT);
-				oled->drawString(0, 10, "Meter readings");
+                oled->drawString(0, 10, "DV");
+                oled->drawString(20, 10, "SN");
+                oled->drawString(40, 10, "VAL");
+
+                unsigned int offsetY = 20;
+
+                // get all sensor readings and generate appropriate HTML representation
+                for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
+                {
+                    Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
+                    Reading* reading = sensor->getReadings();
+                    bool readingCounter = 0;
+                    while (reading->value != Reading::VALUE_LAST)
+                    {
+                        oled->drawString(0, offsetY + 10 * readingCounter, String(i + 1));
+                        oled->drawString(20, offsetY + 10 * readingCounter, String(readingCounter + 1));
+                        oled->drawString(40, offsetY + 10 * readingCounter, String(reading->value) + " C");
+
+                        reading++; // move to next reading
+                        readingCounter++;
+                    }
+                }
+
+
 				break;
 		}
 
