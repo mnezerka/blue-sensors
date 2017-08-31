@@ -59,11 +59,49 @@ https://www.aliexpress.com/item/IIC-I2C-TWI-Serial-LCD-2004-20x4-Display-Shield-
 
 https://www.aliexpress.com/item/1pcs-Free-Shipping-White-Blue-White-and-Blue-color-0-96-inch-128X64-OLED-Display-Module/32717950155.html?spm=a2g0s.9042311.0.0.1w6xrw
 
+Wiring:
+
+```
+                         +---------------+
+   GND <-> GND           |               |
+   VDD <-> 3V3           |     OLED      |
+   SCK <-> D5            |    Display    |
+   SDA <-> D3            |               |
+                         +---------------+
+                           |   |   |   |
+                          GND VDD SCK SDA
+                           .   .   .   .
+                           .   ................................      
+                           .       .   .                      . 
+                           ................................   .
+                                   .   .                  .   .
+                                   .   .                  .   .
+                   .....................                  .   .
+                   .               .                      .   .
+                  D3              D5                     GND 3V3
+       |   |   |   |   |   |   |   |   |   |   |   |  |   |   |
+      +---------------------------------------------------------+
+      |                                                         |
+      |                                                 FLASH O |
+      |                                                         |
+      |                                                         |
+      |                                                     +---+
+      |                                                     |   | USB
+      |                                                     |   |
+      |                                                     +---+
+      |                                                         |
+      |                                                  RST  O |
+      |                                                         |
+      +---------------------------------------------------------+
+       |   |   |   |   |   |   |   |   |   |   |   |  |   |   |
+```
+
 ## Build Variants
 It is possible to configure buld variant via build flags. 
 
 ```
 export PLATFORMIO_BUILD_FLAGS=-DENABLE_DUMMY_SENSOR
+export PLATFORMIO_BUILD_FLAGS='-DENABLE_DUMMY_SENSOR -DPUSH_URL=\"http://192.168.0.11:9200/api/readings\"'
 ```
 
 Available flags:

@@ -2,13 +2,11 @@
 #define READINGS_HTTP_UPLOADER_H
 
 #include <ESP8266HTTPClient.h>
-//#include <AES.h>
-//#include <ebase64.h>
-//#include <libb64/cencode.h>
-
+#include <blue_aes.h>
 #include "config.h"
 #include "Sensors.h"
 #include "DeviceState.h"
+#include "TimeProvider.h"
 
 class ReadingsHttpUploader
 {
@@ -17,19 +15,29 @@ class ReadingsHttpUploader
     void processReadings()
     {
         HTTPClient http;
-        //String url = "http://blue.pavoucek.cz";
         String url = PUSH_URL;
         String logPrefix = "[HTTP] ";
 
-        // configure traged server and url
-        http.begin(url); //HTTP
-
-        http.addHeader("Content-Type", "application/json");
+        // buffer used for preparation of data to push over http
+        char push_buffer[PUSH_AES_BUFFER_SIZE];
 
         DeviceState::getInstance().debug(logPrefix + "POST to " + url);
 
-        //int httpCode = http.POST(encodePayload(readings2Json(sensors)));
-        int httpCode = http.POST(readings2Json());
+        http.begin(url);
+        http.addHeader("Content-Type", "application/octet-stream");
+
+        // get all readings in json format and store is as sequence of chars
+        readings2Json().toCharArray(push_buffer, PUSH_AES_BUFFER_SIZE);
+
+        // encrypt json with readings data 
+        unsigned int encrypted_size = blue_aes_pkcs7_encrypt(
+            (unsigned char*)push_buffer,
+            (unsigned int)strlen(push_buffer),
+            PUSH_AES_BUFFER_SIZE,
+            (unsigned char*)PUSH_ENCRYPTION_PASSWORD);
+
+        // initiate HTTP POST request
+        int httpCode = http.POST((unsigned char*)push_buffer, encrypted_size);
 
         // httpCode will be negative on error
         if(httpCode > 0)
@@ -73,6 +81,10 @@ class ReadingsHttpUploader
         result += (WiFi.RSSI());
         result += ", ";
 
+        result += "\"time\": ";
+        result += TimeProvider::getInstance().getUnixTimestamp();
+        result += ", ";
+
         result += "\"readings\": [";
     
         // get all sensor readings and generate appropriate HTML representation
@@ -98,12 +110,8 @@ class ReadingsHttpUploader
         return result;
     }
 
-    String encodePayload(String payload)
-    {
-        return payload;
-    }
-
 	// helper method for printing array of bytes
+    /*
 	void printArray(String name, byte *arr, int length)
 	{
 		Serial.print(name + ": ");
@@ -113,7 +121,7 @@ class ReadingsHttpUploader
 		}
 		Serial.println();
 	}
-
+    */
 };
 
 #endif

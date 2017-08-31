@@ -24,7 +24,7 @@
 
 // password used for encyption of 
 #ifndef PUSH_ENCRYPTION_PASSWORD
-#define PUSH_ENCRYPTION_PASSWORD "mysecret"
+#define PUSH_ENCRYPTION_PASSWORD "xyxyxyxyxyxyxyxy"
 #endif
 
 // size of the encryption buffer (expeced size of pkcs7 padded push message)
