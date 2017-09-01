@@ -5,7 +5,14 @@ Implementation of simple sensors (e.g. temperature) reader and publisher
 
 All boards are based on ESP8266 chip.
 
+### nodemcuv2
+
 https://www.aliexpress.com/item/1pcs-V3-4M-4FLASH-NodeMcu-Lua-WIFI-Networking-development-board-Based-ESP8266/32787382982.html?spm=a2g0s.9042311.0.0.1w6xrw
+
+
+### Wemos D1 Mini
+
+https://wiki.wemos.cc/products:d1:d1_mini
 
 https://www.aliexpress.com/item/D1-mini-V1-Mini-NodeMcu-4M-bytes-Lua-WIFI-Internet-of-Things-development-board-based-ESP8266/32787418018.html?spm=a2g0s.9042311.0.0.1w6xrw
 
