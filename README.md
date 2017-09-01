@@ -34,8 +34,18 @@ https://www.aliexpress.com/item/100-New-and-original-DALLAS-DS18B20-TO-92-IC-fre
              |   |   |
          GND |   |   | VCC
              | DATA  |
-             |   |   |
+             |   |   +------------+
+             |   |                |
+             |   |                |
+             |   | +----------+   |
+             |   +-+ 4700 ohm +---+
+             |   | +----------+   |
+             |   |                |
+             |   |                |
+            GND  DX              3V
+
 ```
+4700 ohm resistor (bar colors: yello, blue, red and white) is needed
 
 
 
