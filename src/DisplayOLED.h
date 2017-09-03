@@ -31,7 +31,7 @@ class DisplayOLED: public DeviceStateListener
         // Initialize the OLED display using Wire library
         // D3 -> SDA
         // D5 -> SCL
-        oled = new SSD1306(0x3c, D3, D5);
+        oled = new SSD1306(0x3c, D5, D3);
 		lastScreenChange = millis();
     }
   
