@@ -37,4 +37,17 @@
 #define TIME_ZONE_OFFSET 60 * 60 * 2
 #endif
 
+// Wire (I2C) settings common for all I2C devices
+#ifndef WIRE_SDA
+#define WIRE_SDA D3
+#endif
+
+#ifndef WIRE_SCL
+#define WIRE_SCL D4
+#endif
+
+#ifndef SENSOR_BMA280_ADDR
+#define SENSOR_BMA280_ADDR 0x76
+#endif
+
 #endif

@@ -32,9 +32,9 @@ class SerialWriter: public DeviceStateListener
         {
             Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
-            while (reading->value != Reading::VALUE_LAST)
+            while (!reading->isLast)
             {
-                Serial.println(reading->address + ": " + String(reading->value) + "C");
+                Serial.println(reading->address + ": " + String(reading->temperature) + "C");
                 reading++;
             }
         }

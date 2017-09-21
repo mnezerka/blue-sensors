@@ -5,18 +5,18 @@ class Reading
 {
   public:
     static const int VALUE_NA = -8888;
-    static const int VALUE_LAST = -9999;
     
     String address;
-    float value;
-
-    Reading() : address(""), value(VALUE_NA) {}
+    float temperature;
+    float humidity;
+    float pressure;
+    bool isLast;
+    Reading() : address(""), temperature(VALUE_NA), humidity(VALUE_NA), pressure(VALUE_NA), isLast(false) {}
 };
 
 class Sensor
 {
   public:
-    //Sensor(DeviceState *deviceState);
     virtual void begin() {};
 
     // force sensor(s) to take readings
@@ -24,6 +24,10 @@ class Sensor
 
     // get last measured readings
     virtual Reading* getReadings();
+
+    virtual bool providesTemperature() { return false; };
+    virtual bool providesHumidity() { return false; };
+    virtual bool providesPressure() { return false; };
 };
 
 #endif

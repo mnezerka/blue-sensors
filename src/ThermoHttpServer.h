@@ -92,9 +92,20 @@ class ThermoHttpServer : public RequestHandler
         {
           Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
           Reading* reading = sensor->getReadings();
-          while (reading->value != Reading::VALUE_LAST)
+          while (!reading->isLast)
           {
-            info += ("<b>" + reading->address + ":</b> " + String(reading->value) + "&#8451;<br />");
+            if (sensor->providesTemperature())
+            {
+                info += ("<b>" + reading->address + ":</b> " + String(reading->temperature) + "&#8451;<br />");
+            }
+            if (sensor->providesHumidity())
+            {
+                info += ("<b>" + reading->address + ":</b> " + String(reading->humidity) + " %<br />");
+            }
+            if (sensor->providesPressure())
+            {
+                info += ("<b>" + reading->address + ":</b> " + String(reading->pressure) + " hPa<br />");
+            }
             reading++;
           }
         }

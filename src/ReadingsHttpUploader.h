@@ -93,11 +93,19 @@ class ReadingsHttpUploader
             Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             bool readingCounter = 0;
-            while (reading->value != Reading::VALUE_LAST)
+            while (!reading->isLast)
             {
-                // Serial.println(reading->address + ": " + String(reading->value) + "C");
                 if (readingCounter > 0) result += ",";
-                result += "{\"address\": \"" + reading->address + "\", \"value\": " + reading->value + "}";
+                result += "{\"address\": \"" + reading->address + "\"";
+                if (sensor->providesTemperature())
+                {
+                    result += ", \"t\": " + String(reading->temperature);
+                }
+                if (sensor->providesHumidity())
+                {
+                    result += ", \"h\": " + String(reading->humidity);
+                }
+                result += "}";
                 reading++;
                 readingCounter++;
             }

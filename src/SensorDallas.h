@@ -12,106 +12,109 @@
 
 class SensorDallas : public Sensor
 {
-  private:
-    int dallasCount = 0; // number of available dallas sensors
-    DeviceAddress dallasAddress[DALLAS_MAX_DEVICES];
-    Reading readings[DALLAS_MAX_DEVICES + 1];
-    OneWire *oneWire = NULL;
-    DallasTemperature *dallas = NULL;
+    private:
+        int dallasCount = 0; // number of available dallas sensors
+        DeviceAddress dallasAddress[DALLAS_MAX_DEVICES];
+        Reading readings[DALLAS_MAX_DEVICES + 1];
+        OneWire *oneWire = NULL;
+        DallasTemperature *dallas = NULL;
     
-  public:
+    public:
 
-    SensorDallas(OneWire *oneWire)
-    {
-      this->oneWire = oneWire;
-    }
+        SensorDallas(OneWire *oneWire)
+        {
+          this->oneWire = oneWire;
+        }
 
-  void begin()
-  {
-    // pass oneWire reference to Dallas Temperature. 
-    dallas = new DallasTemperature(oneWire);
-    //DeviceAddress sensorDeviceAddress;
+        bool providesTemperature() { return true; };
 
-    //Serial.print(int(deviceState));
-    DeviceState::getInstance().state("Init dallas");
+        void begin()
+        {
+            // pass oneWire reference to Dallas Temperature. 
+            dallas = new DallasTemperature(oneWire);
+            //DeviceAddress sensorDeviceAddress;
 
-    dallas->begin();
-  
-    dallasCount = dallas->getDeviceCount();
-    String msg = "Found ";
-    DeviceState::getInstance().debug(msg + dallasCount + " devices");
-    
-    if (dallasCount > DALLAS_MAX_DEVICES) {
-      msg = "Too many devices found ( ";
-      DeviceState::getInstance().debug(msg + dallasCount + ") truncating to " + DALLAS_MAX_DEVICES + " devices");
-      dallasCount = DALLAS_MAX_DEVICES;
-    }
-  
-    for (int i = 0; i < dallasCount; i++)
-    {
-      msg = "Init dallas device";
-      DeviceState::getInstance().debug(msg + i);
+            //Serial.print(int(deviceState));
+            DeviceState::getInstance().state("Init dallas");
 
-      // get unique address of sensor
-      dallas->getAddress(dallasAddress[i], i);
-      
-      // set sensor resolution (precision of measurements)
-      dallas->setResolution(dallasAddress[i], SENSOR_RESOLUTION);
-      
-      //TMP dallasPrintAddress(dallasAddress[i]);
+            dallas->begin();
+          
+            dallasCount = dallas->getDeviceCount();
+            String msg = "Found ";
+            DeviceState::getInstance().debug(msg + dallasCount + " devices");
+            
+            if (dallasCount > DALLAS_MAX_DEVICES)
+            {
+                msg = "Too many devices found ( ";
+                DeviceState::getInstance().debug(msg + dallasCount + ") truncating to " + DALLAS_MAX_DEVICES + " devices");
+                dallasCount = DALLAS_MAX_DEVICES;
+            }
+          
+            for (int i = 0; i < dallasCount; i++)
+            {
+                msg = "Init dallas device";
+                DeviceState::getInstance().debug(msg + i);
 
-      readings[i].address = dallasAddress2String(dallasAddress[i]);
-      DeviceState::getInstance().debug(dallasAddress2String(dallasAddress[i]));
-    }
+                // get unique address of sensor
+                dallas->getAddress(dallasAddress[i], i);
+                
+                // set sensor resolution (precision of measurements)
+                dallas->setResolution(dallasAddress[i], SENSOR_RESOLUTION);
+                
+                //TMP dallasPrintAddress(dallasAddress[i]);
 
-    readings[dallasCount + 1].value = Reading::VALUE_LAST;
-  }
+                readings[i].address = dallasAddress2String(dallasAddress[i]);
+                DeviceState::getInstance().debug(dallasAddress2String(dallasAddress[i]));
+            }
 
-  Reading* takeReadings()
-  {
-    float dallasTemp[DALLAS_MAX_DEVICES];
-    dallasRead(dallasTemp);
-  
-    for (int i = 0; i < dallasCount && i < 3; i++)
-    {
-      readings[i].value = dallasTemp[i];
-    }
-    readings[dallasCount].value = Reading::VALUE_LAST;
+            readings[dallasCount + 1].isLast = true;
+        }
 
-    return getReadings();
-  }
+        Reading* takeReadings()
+        {
+            float dallasTemp[DALLAS_MAX_DEVICES];
+            dallasRead(dallasTemp);
+          
+            for (int i = 0; i < dallasCount && i < 3; i++)
+            {
+                readings[i].temperature = dallasTemp[i];
+            }
+            readings[dallasCount].isLast = true;
 
-  Reading* getReadings()
-  {
-    return readings;
-  }
+            return getReadings();
+        }
 
-  void dallasRead(float *temp)
-  {
-    // call sensors.requestTemperatures() to issue a global temperature 
-    // request to all devices on the bus
-    dallas->requestTemperatures();
-    
-    for (int i = 0; i < dallasCount; i++)
-    {
-      temp[i] = dallas->getTempCByIndex(i);
-      if (temp[i] == -127) temp[i] = Reading::VALUE_NA;
-    }
-  }
+        Reading* getReadings()
+        {
+            return readings;
+        }
 
-  // get string representation of a dallas device address
-  String dallasAddress2String(DeviceAddress deviceAddress)
-  {
-    String result = "";
-    for (uint8_t i = 0; i < 8; i++)
-    {
-      // zero pad the address if necessary
-      if (deviceAddress[i] < 16) result += "0";
-      
-      result += String(deviceAddress[i], HEX);
-    }
-    return result;
-  }
+        void dallasRead(float *temp)
+        {
+            // call sensors.requestTemperatures() to issue a global temperature 
+            // request to all devices on the bus
+            dallas->requestTemperatures();
+
+            for (int i = 0; i < dallasCount; i++)
+            {
+                temp[i] = dallas->getTempCByIndex(i);
+                if (temp[i] == -127) temp[i] = Reading::VALUE_NA;
+            }
+        }
+
+        // get string representation of a dallas device address
+        String dallasAddress2String(DeviceAddress deviceAddress)
+        {
+            String result = "";
+            for (uint8_t i = 0; i < 8; i++)
+            {
+                // zero pad the address if necessary
+                if (deviceAddress[i] < 16) result += "0";
+              
+                result += String(deviceAddress[i], HEX);
+            }
+            return result;
+        }
 };
 
 #endif

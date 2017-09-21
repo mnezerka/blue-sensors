@@ -68,6 +68,18 @@ https://www.aliexpress.com/item/Stainless-Steel-Package-1-Meters-Waterproof-DS18
                                        +---------------
 ```
 
+### BME280 I2C Sensor
+
+I2C address can be 0x76 or 0x77 (use I2C scanner to detect right value)
+
+Wiring:
+```
+GND <-> GND
+VCC <-> 3V
+SDA <-> D3
+SCL <-> D4
+```
+
 ### LCD I2C Display
 
 https://www.aliexpress.com/item/IIC-I2C-TWI-Serial-LCD-2004-20x4-Display-Shield-Blue-Backlight-for-Arduino-Free-Shipping/32599904427.html?spm=a2g0s.9042311.0.0.1w6xrw
@@ -117,13 +129,14 @@ Wiring:
 It is possible to configure buld variant via build flags. 
 
 ```
-export PLATFORMIO_BUILD_FLAGS=-DENABLE_DUMMY_SENSOR
-export PLATFORMIO_BUILD_FLAGS='-DENABLE_DUMMY_SENSOR -DPUSH_URL=\"http://192.168.0.11:9200/api/readings\"'
+export PLATFORMIO_BUILD_FLAGS=-DENABLE_DUMMY_SENSORS
+export PLATFORMIO_BUILD_FLAGS='-DENABLE_DUMMY_SENSORS -DPUSH_URL=\"http://192.168.0.11:9200/api/readings\"'
 ```
 
 Available flags:
 - `ENABLE_DUMMY_SENSOR` - enable dummy temperature sensor which simulates thermo sensor 
-- `ENABLE_DALLAS_SENSOR` - enable dallas onewire sensors
+- `ENABLE_DALLAS_SENSORS` - enable dallas onewire sensors
+- `ENABLE_BME280_SENSORS` - enable BME280 sensor
 - `DEVICE_ID` - device identification string
 - `INTERVAL_READINGS` - interval (ms) for reading and pushing sensor readings
 - `PUSH_URL` - url of the api for processing of pushed readings

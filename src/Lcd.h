@@ -56,10 +56,10 @@ class Lcd: public DeviceStateListener
             Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             bool readingCounter = 0;
-            while (reading->value != Reading::VALUE_LAST)
+            while (!reading->isLast)
             {
  				lcd->setCursor(0, readingCounter);
-				lcd->print(String(i) + "-" + String(readingCounter) + ": " + String(reading->value) + " C");
+				lcd->print(String(i) + "-" + String(readingCounter) + ": " + String(reading->temperature) + " C");
 
                 reading++;
                 readingCounter++;

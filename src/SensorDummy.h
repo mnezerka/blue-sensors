@@ -16,14 +16,14 @@ class SensorDummy: public Sensor
 
     SensorDummy()
     {
-        readings[0].value = DUMMY_VALUE;
+        readings[0].temperature = DUMMY_VALUE;
         readings[0].address = "dummy";
-        readings[1].value = Reading::VALUE_LAST;
+        readings[1].isLast = true;
     }
 
     Reading* takeReadings()
     {
-        readings[0].value = readings[0].value * -1;
+        readings[0].temperature = readings[0].temperature * -1;
         return getReadings();
     }
 

@@ -12,6 +12,7 @@
 #include "DisplayOLED.h"
 #include "Sensors.h"
 #include "SensorDallas.h"
+#include "SensorBME280.h"
 #include "SensorDummy.h"
 #include "TimeProvider.h"
 
@@ -38,6 +39,11 @@ DisplayOLED oled;
 SensorDallas dallas(&oneWire);
 #endif
 
+// Instance of BME280 sensor interface
+#ifdef ENABLE_BME280_SENSORS
+SensorBME280 bme;
+#endif
+
 #ifdef ENABLE_DUMMY_SENSOR 
 SensorDummy dummy;
 #endif
@@ -54,6 +60,10 @@ void handleDeviceState();
 
 void setup(void)
 {
+    //Wire.begin(WIRE_SDA, WIRE_SCL);
+    //Wire.begin(D3, D4);
+    //Wire.setClock(100000);
+
     // init device state listeners
     DeviceState::getInstance().addListener(&serialWriter);
     DeviceState::getInstance().addListener(&lcd);
@@ -66,6 +76,10 @@ void setup(void)
     // init all sensors
 #ifdef ENABLE_DALLAS_SENSORS
     Sensors::getInstance().addSensor(&dallas);
+#endif
+
+#ifdef ENABLE_BME280_SENSORS
+    Sensors::getInstance().addSensor(&bme);
 #endif
 
 #ifdef ENABLE_DUMMY_SENSOR 

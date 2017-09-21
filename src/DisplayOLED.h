@@ -31,7 +31,8 @@ class DisplayOLED: public DeviceStateListener
         // Initialize the OLED display using Wire library
         // D3 -> SDA
         // D5 -> SCL
-        oled = new SSD1306(0x3c, D5, D3);
+        //oled = new SSD1306(0x3c, D5, D3);
+        oled = new SSD1306(0x3c, WIRE_SCL, WIRE_SDA);
 		lastScreenChange = millis();
     }
   
@@ -60,9 +61,9 @@ class DisplayOLED: public DeviceStateListener
             Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
             bool readingCounter = 1;
-            while (reading->value != Reading::VALUE_LAST)
+            while (!reading->isLast)
             {
-                String msg = String(i) + "-" + String(readingCounter) + ": " + String(reading->value) + " C";
+                String msg = String(i) + "-" + String(readingCounter) + ": " + String(reading->temperature) + " C";
 
                 oled->setTextAlignment(TEXT_ALIGN_LEFT);
                 oled->drawString(0, 10 * readingCounter, msg);
@@ -136,11 +137,11 @@ class DisplayOLED: public DeviceStateListener
                     Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
                     Reading* reading = sensor->getReadings();
                     bool readingCounter = 0;
-                    while (reading->value != Reading::VALUE_LAST)
+                    while (!reading->isLast)
                     {
                         oled->drawString(0, offsetY + 10 * readingCounter, String(i + 1));
                         oled->drawString(20, offsetY + 10 * readingCounter, String(readingCounter + 1));
-                        oled->drawString(40, offsetY + 10 * readingCounter, String(reading->value) + " C");
+                        oled->drawString(40, offsetY + 10 * readingCounter, String(reading->temperature) + " C");
 
                         reading++; // move to next reading
                         readingCounter++;
