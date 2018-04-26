@@ -4,6 +4,6 @@ Blue Sensors
 Implementation of simple sensors (e.g. temperature) reader and publisher based
 on ESP8266 chip.
 
-:doc:`Components <doc/components>`
+`Components <https:/doc/components.rst>`_
 
-:doc:`Build and Deployment <doc/build>`
+`Build and Deployment <doc/build.rst>`_
