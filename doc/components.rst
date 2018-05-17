@@ -21,6 +21,12 @@ https://wiki.wemos.cc/products:d1:d1_mini
 
 https://www.aliexpress.com/item/D1-mini-V1-Mini-NodeMcu-4M-bytes-Lua-WIFI-Internet-of-Things-development-board-based-ESP8266/32787418018.html?spm=a2g0s.9042311.0.0.1w6xrw
 
+PCB
+...
+Universal PCB board (4x6cm)
+https://www.aliexpress.com/item/5PCS-Double-side-Prototype-PCB-Tinned-Universal-board-4x6-4-6cm/32829197097.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+
+
 Peripherials 
 ------------
 
@@ -132,3 +138,20 @@ Wiring::
         |                                                         |
         +---------------------------------------------------------+
          |   |   |   |   |   |   |   |   |   |   |   |  |   |   |
+
+Dupont
+------
+
+Crimping Tool
+.............
+
+https://www.aliexpress.com/item/New-Arrival-SN-28B-Pin-Crimping-Tool-Crimping-Plier-2-54mm-3-96mm-28-18AWG/32649914049.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+
+Various connectors
+..................
+
+https://www.aliexpress.com/item/Free-shiiping-Hot-Sale10pcs-40-Pin-1x40-Single-Row-Male-2-54mm-Breakable-Pin-Header-Connector/32699944798.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+https://www.aliexpress.com/item/620pcs-A-Set-Dupont-Wire-Jumper-Pin-Header-Connector-Housing-Kit-Male-Crimp-Pins-Female-Pin/32736024614.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+https://www.aliexpress.com/item/120Pcs-Lot-10cm-30cm-Color-Ribbon-Line-Breadboard-Dupont-Cable-Jump-Jumper-Wire-Male-to-Male/32798011999.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+https://www.aliexpress.com/item/10pcs-2-54mm-1x40-Pin-Right-Angle-Single-Row-Female-Pin-Header-Connector-Strip-Bending/32326267382.html?spm=a2g0s.9042311.0.0.27424c4do7p8SV
+
