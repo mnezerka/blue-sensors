@@ -150,8 +150,8 @@ https://www.aliexpress.com/item/New-Arrival-SN-28B-Pin-Crimping-Tool-Crimping-Pl
 Various connectors
 ..................
 
-https://www.aliexpress.com/item/Free-shiiping-Hot-Sale10pcs-40-Pin-1x40-Single-Row-Male-2-54mm-Breakable-Pin-Header-Connector/32699944798.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
-https://www.aliexpress.com/item/620pcs-A-Set-Dupont-Wire-Jumper-Pin-Header-Connector-Housing-Kit-Male-Crimp-Pins-Female-Pin/32736024614.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
-https://www.aliexpress.com/item/120Pcs-Lot-10cm-30cm-Color-Ribbon-Line-Breadboard-Dupont-Cable-Jump-Jumper-Wire-Male-to-Male/32798011999.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
-https://www.aliexpress.com/item/10pcs-2-54mm-1x40-Pin-Right-Angle-Single-Row-Female-Pin-Header-Connector-Strip-Bending/32326267382.html?spm=a2g0s.9042311.0.0.27424c4do7p8SV
+- https://www.aliexpress.com/item/Free-shiiping-Hot-Sale10pcs-40-Pin-1x40-Single-Row-Male-2-54mm-Breakable-Pin-Header-Connector/32699944798.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+- https://www.aliexpress.com/item/620pcs-A-Set-Dupont-Wire-Jumper-Pin-Header-Connector-Housing-Kit-Male-Crimp-Pins-Female-Pin/32736024614.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+- https://www.aliexpress.com/item/120Pcs-Lot-10cm-30cm-Color-Ribbon-Line-Breadboard-Dupont-Cable-Jump-Jumper-Wire-Male-to-Male/32798011999.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
+- https://www.aliexpress.com/item/10pcs-2-54mm-1x40-Pin-Right-Angle-Single-Row-Female-Pin-Header-Connector-Strip-Bending/32326267382.html?spm=a2g0s.9042311.0.0.27424c4do7p8SV
 
