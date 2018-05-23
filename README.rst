@@ -6,6 +6,8 @@ on ESP8266 chip.
 
 `Components <doc/components.rst>`_
 
+`Wiring <doc/wiring.rst>`_
+
 `Packaging <doc/packaging.rst>`_
 
 `Build and Deployment <doc/build.rst>`_

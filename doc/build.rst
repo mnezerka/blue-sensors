@@ -18,3 +18,43 @@ Available flags:
 - `PUSH_URL` - url of the api for processing of pushed readings
 - `PUSH_ENCRYPTION_PASSWORD` - password to be used for http content encryption (shall have 16 characters)
 - `PUSH_AES_BUFFER_SIZE` - size of the buffer for complete content sent to the server (default 1024)
+- `ONE_WIRE_BUS` - GPIO pin to which is connected one wire data cable (for Dallas sensors)
+- `WIRE_SDA` - GPIO pin to which is connected I2C bus SDA
+- `WIRE_SCL` - GPIO pin to which is connected I2C bus SCL
+- `SENSOR_BMA_ADDR` - address for BMA sensor
+
+Step By Step
+------------
+
+List available devices::
+
+    pio device list
+
+Device connected to usb should be in list (in our case `ttyUSB0`)::
+
+    /dev/ttyS0
+    ----------
+    Hardware ID: PNP0501
+    Description: ttyS0
+
+    /dev/ttyUSB0
+    ------------
+    Hardware ID: USB VID:PID=1A86:7523 LOCATION=1-1.3
+    Description: USB2.0-Serial
+
+Tailor build by setting flags, e.g.::
+
+    export PLATFORMIO_BUILD_FLAGS=-DENABLE_DALLAS_SENSORS
+
+Build and falsh to selected environment (`d1_mini` in our case)::
+    
+    pio run -e d1_mini -t upload
+
+Check state of the device by observing serial console::
+
+    pio device monitor
+
+Troubleshooting
+---------------
+Try I2C scanner in case of inactive I2C device:
+https://github.com/mnezerka/arduino/tree/master/i2c_scanner
