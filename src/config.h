@@ -7,7 +7,9 @@
 #endif
 
 // data wire is plugged into port 2 on the Arduino
+#ifndef ONE_WIRE_BUS
 #define ONE_WIRE_BUS 4
+#endif
 
 // define interval for reading data from sensors (in miliseconds)
 #define INTERVAL_READINGS 10000
