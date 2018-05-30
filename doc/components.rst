@@ -84,6 +84,7 @@ https://www.aliexpress.com/item/Stainless-Steel-Package-1-Meters-Waterproof-DS18
 
 BME280 I2C Sensor
 .................
+https://www.aliexpress.com/item/3In1-BME280-GY-BME280-Digital-Sensor-SPI-I2C-Humidity-Temperature-and-Barometric-Pressure-Sensor-Module-1/32847825408.html
 
 I2C address can be 0x76 or 0x77 (use I2C scanner to detect right value)
 
