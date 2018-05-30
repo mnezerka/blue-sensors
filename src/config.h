@@ -3,7 +3,7 @@
 
 // device identification (for various purposes)
 #ifndef DEVICE_ID
-#define DEVICE_ID "thermo";
+#define DEVICE_ID "thermo"
 #endif
 
 // data wire is plugged into port 2 on the Arduino

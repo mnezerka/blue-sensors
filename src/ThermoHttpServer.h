@@ -6,6 +6,7 @@
 #include <ESP8266WebServer.h> // https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer
 #include "DeviceState.h"
 #include "Sensors.h"
+#include "config.h"
 
 class ThermoHttpServer : public RequestHandler
 {
@@ -18,7 +19,7 @@ class ThermoHttpServer : public RequestHandler
 
     ThermoHttpServer(): RequestHandler()
     {
-      this->hostName = "thermo";
+      this->hostName = DEVICE_ID;
       httpServer = new ESP8266WebServer(80);
     }
 
