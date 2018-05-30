@@ -16,6 +16,7 @@ Available flags:
 - `DEVICE_ID` - device identification string
 - `INTERVAL_READINGS` - interval (ms) for reading and pushing sensor readings
 - `PUSH_URL` - url of the api for processing of pushed readings
+- `PUSH_ENCRYPTION_ENABLED` - enable or disable encryption of data pushed over http (default is 0 = no ecryption)
 - `PUSH_ENCRYPTION_PASSWORD` - password to be used for http content encryption (shall have 16 characters)
 - `PUSH_AES_BUFFER_SIZE` - size of the buffer for complete content sent to the server (default 1024)
 - `ONE_WIRE_BUS` - GPIO pin to which is connected one wire data cable (for Dallas sensors)

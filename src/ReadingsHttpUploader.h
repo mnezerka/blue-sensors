@@ -29,15 +29,22 @@ class ReadingsHttpUploader
         // get all readings in json format and store is as sequence of chars
         readings2Json().toCharArray(push_buffer, PUSH_AES_BUFFER_SIZE);
 
+        unsigned int push_buffer_content_size = strlen(push_buffer);
+
         // encrypt json with readings data 
-        unsigned int encrypted_size = blue_aes_pkcs7_encrypt(
-            (unsigned char*)push_buffer,
-            (unsigned int)strlen(push_buffer),
-            PUSH_AES_BUFFER_SIZE,
-            (unsigned char*)PUSH_ENCRYPTION_PASSWORD);
+        if (PUSH_ENCRYPTION_ENABLED)
+        {
+            DeviceState::getInstance().debug(logPrefix + "POST encryption enabled, encrypting content");
+
+            push_buffer_content_size = blue_aes_pkcs7_encrypt(
+                (unsigned char*)push_buffer,
+                (unsigned int)strlen(push_buffer),
+                PUSH_AES_BUFFER_SIZE,
+                (unsigned char*)PUSH_ENCRYPTION_PASSWORD);
+        }
 
         // initiate HTTP POST request
-        int httpCode = http.POST((unsigned char*)push_buffer, encrypted_size);
+        int httpCode = http.POST((unsigned char*)push_buffer, push_buffer_content_size);
 
         // httpCode will be negative on error
         if(httpCode > 0)

@@ -24,10 +24,16 @@
 #define PUSH_URL "http://192.168.0.12:9200/api/readings"
 #endif
 
-// password used for encyption of 
+// enable encryption of pushed data
+#ifndef PUSH_ENCRYPTION_ENABLED
+#define PUSH_ENCRYPTION_ENABLED 0
+#endif
+
+// password used for encyption
 #ifndef PUSH_ENCRYPTION_PASSWORD
 #define PUSH_ENCRYPTION_PASSWORD "xyxyxyxyxyxyxyxy"
 #endif
+
 
 // size of the encryption buffer (expeced size of pkcs7 padded push message)
 #ifndef PUSH_AES_BUFFER_SIZE
