@@ -12,3 +12,4 @@ on ESP8266 chip.
 
 `Build and Deployment <doc/build.rst>`_
 
+`Communication Protocols <doc/protocols.rst>`_
