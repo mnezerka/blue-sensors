@@ -8,7 +8,7 @@
 class WifiConnectivity
 {
   public:
-  
+
     void begin()
     {
         DeviceState::getInstance().state("Init wifi manager");
@@ -17,6 +17,6 @@ class WifiConnectivity
         wifiManager.setTimeout(300);
         wifiManager.autoConnect("ESP8266 Settings");
     }
-};    
+};
 
 #endif

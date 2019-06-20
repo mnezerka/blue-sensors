@@ -14,7 +14,7 @@ class ThermoHttpServer : public RequestHandler
 
     ESP8266WebServer *httpServer = NULL;
     String hostName;
-    
+
     public:
 
     ThermoHttpServer(): RequestHandler()
@@ -27,7 +27,7 @@ class ThermoHttpServer : public RequestHandler
     {
       DeviceState::getInstance().state("Init WebServer");
       DeviceState::getInstance().debug("Device hostname is " + this->hostName);
-      
+
       MDNS.begin(this->hostName.c_str());
       httpServer->addHandler(this);
       httpServer->begin();
@@ -43,12 +43,12 @@ class ThermoHttpServer : public RequestHandler
     {
       if (!canHandle(requestMethod, requestUri))
         return false;
-        
+
       // send content
       server.sendHeader("Connection", "close");
       server.sendHeader("Access-Control-Allow-Origin", "*");
       server.send(200, "text/html", deviceStatus());
-      
+
       return true;
     }
 
@@ -56,33 +56,33 @@ class ThermoHttpServer : public RequestHandler
     {
       httpServer->handleClient();
     }
-    
+
     String deviceStatus()
     {
         String info;
-    
+
         info  = "<!DOCTYPE HTML><html><head><title>ESP8266 device</title><meta charset='utf-8' />";
         info += "<style>html{font-family: sans-serif}</style></head>";
         info += "<body><h1>ESP8266 device</h1>";
-    
+
         info += ("<b>Hostname:</b> ");
         info += (hostName + ".local [<a href='//" + hostName + ".local'>open</a>]");
         info += ("<br />");
-    
+
         info += ("<b>IP address:</b> ");
         info += (WiFi.localIP().toString());
         info += ("<br />");
-    
+
         byte mac[6];
-    
+
         info += ("<b>MAC address:</b> ");
         info += mac2String(WiFi.macAddress(mac));
         info += ("<br />");
-    
+
         info += ("<b>WiFi network (SSID):</b> ");
         info += (WiFi.SSID());
         info += ("<br />");
-    
+
         info += ("<b>Signal strength (RSSI):</b> ");
         info += (WiFi.RSSI());
         info += (" dBm");
@@ -110,9 +110,9 @@ class ThermoHttpServer : public RequestHandler
             reading++;
           }
         }
-    
+
         info += ("</body></html>");
-       
+
         return info;
     }
 
@@ -128,7 +128,7 @@ class ThermoHttpServer : public RequestHandler
       }
       return s;
     }
-    
+
 };
 
 #endif

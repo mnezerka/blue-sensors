@@ -1,4 +1,4 @@
-#ifndef CONFIG_H 
+#ifndef CONFIG_H
 #define CONFIG_H
 
 // device identification (for various purposes)
@@ -12,7 +12,9 @@
 #endif
 
 // define interval for reading data from sensors (in miliseconds)
+#ifndef INTERVAL_READINGS
 #define INTERVAL_READINGS 10000
+#endif
 
 // LCD display settings
 #define LCD_ADDR 0x27

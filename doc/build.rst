@@ -10,6 +10,10 @@ flags is environment are provided as environment variables::
 
 Available flags:
 
+- `ENABLE_WIFI` - enable wifi connectivity
+- `ENABLE_GPRS` - enable gprs connectivity (SIM module must be connected via serial port)
+- `ENABLE_LCD` - enable lcd display
+- `ENABLE_OLED` - enable oled display
 - `ENABLE_DUMMY_SENSOR` - enable dummy temperature sensor which simulates thermo sensor 
 - `ENABLE_DALLAS_SENSORS` - enable dallas onewire sensors
 - `ENABLE_BME280_SENSORS` - enable BME280 sensor
@@ -48,7 +52,7 @@ Tailor build by setting flags, e.g.::
     export PLATFORMIO_BUILD_FLAGS=-DENABLE_DALLAS_SENSORS
 
 Build and falsh to selected environment (`d1_mini` in our case)::
-    
+
     pio run -e d1_mini -t upload
 
 Check state of the device by observing serial console::

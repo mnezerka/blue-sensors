@@ -18,7 +18,7 @@ class SensorDallas : public Sensor
         Reading readings[DALLAS_MAX_DEVICES + 1];
         OneWire *oneWire = NULL;
         DallasTemperature *dallas = NULL;
-    
+
     public:
 
         SensorDallas(OneWire *oneWire)
@@ -30,7 +30,7 @@ class SensorDallas : public Sensor
 
         void begin()
         {
-            // pass oneWire reference to Dallas Temperature. 
+            // pass oneWire reference to Dallas Temperature.
             dallas = new DallasTemperature(oneWire);
             //DeviceAddress sensorDeviceAddress;
 
@@ -38,18 +38,18 @@ class SensorDallas : public Sensor
             DeviceState::getInstance().state("Init dallas");
 
             dallas->begin();
-          
+
             dallasCount = dallas->getDeviceCount();
             String msg = "Found ";
             DeviceState::getInstance().debug(msg + dallasCount + " devices");
-            
+
             if (dallasCount > DALLAS_MAX_DEVICES)
             {
                 msg = "Too many devices found ( ";
                 DeviceState::getInstance().debug(msg + dallasCount + ") truncating to " + DALLAS_MAX_DEVICES + " devices");
                 dallasCount = DALLAS_MAX_DEVICES;
             }
-          
+
             for (int i = 0; i < dallasCount; i++)
             {
                 msg = "Init dallas device";
@@ -57,10 +57,10 @@ class SensorDallas : public Sensor
 
                 // get unique address of sensor
                 dallas->getAddress(dallasAddress[i], i);
-                
+
                 // set sensor resolution (precision of measurements)
                 dallas->setResolution(dallasAddress[i], SENSOR_RESOLUTION);
-                
+
                 //TMP dallasPrintAddress(dallasAddress[i]);
 
                 readings[i].address = dallasAddress2String(dallasAddress[i]);
@@ -74,7 +74,7 @@ class SensorDallas : public Sensor
         {
             float dallasTemp[DALLAS_MAX_DEVICES];
             dallasRead(dallasTemp);
-          
+
             for (int i = 0; i < dallasCount && i < 3; i++)
             {
                 readings[i].temperature = dallasTemp[i];
@@ -91,7 +91,7 @@ class SensorDallas : public Sensor
 
         void dallasRead(float *temp)
         {
-            // call sensors.requestTemperatures() to issue a global temperature 
+            // call sensors.requestTemperatures() to issue a global temperature
             // request to all devices on the bus
             dallas->requestTemperatures();
 
@@ -110,7 +110,7 @@ class SensorDallas : public Sensor
             {
                 // zero pad the address if necessary
                 if (deviceAddress[i] < 16) result += "0";
-              
+
                 result += String(deviceAddress[i], HEX);
             }
             return result;

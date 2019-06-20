@@ -18,36 +18,36 @@ class SensorBME280 : public Sensor
         int bmeCount = 0; // number of available sensors
         Adafruit_BME280 *bme = NULL;
         Reading readings[2];
-    
+
     public:
 
         bool providesTemperature() { return true; };
         bool providesHumidity() { return true; };
         bool providesPressure() { return true; };
 
-		void begin()
-		{
+        void begin()
+        {
             //Wire.begin(D3, D4);
             Wire.begin(WIRE_SDA, WIRE_SCL);
-			bme = new Adafruit_BME280();
+            bme = new Adafruit_BME280();
 
-			DeviceState::getInstance().state("Init BME280");
+            DeviceState::getInstance().state("Init BME280");
 
-			bool status = bme->begin(SENSOR_BMA280_ADDR);  
-			if (!status) {
-				DeviceState::getInstance().debug("Could not find a valid BME280 sensor, check wiring!");
-			} else {
+            bool status = bme->begin(SENSOR_BMA280_ADDR);  
+            if (!status) {
+                DeviceState::getInstance().debug("Could not find a valid BME280 sensor, check wiring!");
+            } else {
                 bmeCount = 1;
             }
-		}
+        }
 
-		Reading* takeReadings()
-		{
-			return getReadings();
-		}
+        Reading* takeReadings()
+        {
+            return getReadings();
+        }
 
-		Reading* getReadings()
-		{
+        Reading* getReadings()
+        {
             if (bmeCount == 0)
             {
                 readings[0].isLast = true;
@@ -61,8 +61,8 @@ class SensorBME280 : public Sensor
                 readings[0].humidity = bme->readHumidity();
                 readings[1].isLast = true;
             }
-			return readings;
-		}
+            return readings;
+        }
 };
 
 #endif

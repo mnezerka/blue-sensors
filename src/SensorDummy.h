@@ -11,7 +11,7 @@ class SensorDummy: public Sensor
 
     int lastValue = DUMMY_VALUE;
     Reading readings[2];
-    
+
     public:
 
     SensorDummy()

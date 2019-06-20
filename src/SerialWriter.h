@@ -7,7 +7,7 @@
 class SerialWriter: public DeviceStateListener
 {
     public:
-  
+
     void begin()
     {
         // initialize serial port

@@ -14,7 +14,7 @@ class Sensors
         {
           mySensors = LinkedList<Sensor*>();
         }
-    
+
     public:
 
         static Sensors& getInstance()
@@ -27,8 +27,8 @@ class Sensors
         // technique of deleting the methods we don't want.
         Sensors(Sensors const&) = delete;
         void operator=(Sensors const&)  = delete;
- 
-    
+
+
         void addSensor(Sensor* sensor)
         {
             mySensors.add(sensor);
@@ -39,7 +39,7 @@ class Sensors
         void begin()
         {
             DeviceState::getInstance().state("Init sensors");
-            
+
             for(int i = 0; i < mySensors.size(); i++)
             {
                 Sensor *sensor = mySensors.get(i);

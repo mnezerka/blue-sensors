@@ -28,7 +28,7 @@ class DeviceState
     // technique of deleting the methods we don't want.
     DeviceState(DeviceState const&) = delete;
     void operator=(DeviceState const&)  = delete;
-  
+
     void addListener(DeviceStateListener* listener)
     {
       myListeners.add(listener);
@@ -37,7 +37,7 @@ class DeviceState
     void begin()
     {
       DeviceStateListener *listener;
-    
+
       for(int i = 0; i < myListeners.size(); i++)
       {
         listener = myListeners.get(i);
@@ -48,7 +48,7 @@ class DeviceState
     void state(String state)
     {
       DeviceStateListener *listener;
-    
+
       for(int i = 0; i < myListeners.size(); i++)
       {
         listener = myListeners.get(i);
@@ -59,7 +59,7 @@ class DeviceState
     void debug(String msg)
     {
       DeviceStateListener *listener;
-    
+
       for(int i = 0; i < myListeners.size(); i++)
       {
         listener = myListeners.get(i);
@@ -70,7 +70,7 @@ class DeviceState
     void update()
     {
         DeviceStateListener *listener;
-    
+
         for(int i = 0; i < myListeners.size(); i++)
         {
             listener = myListeners.get(i);

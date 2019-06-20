@@ -31,7 +31,7 @@ class ReadingsHttpUploader
 
         unsigned int push_buffer_content_size = strlen(push_buffer);
 
-        // encrypt json with readings data 
+        // encrypt json with readings data
         if (PUSH_ENCRYPTION_ENABLED)
         {
             DeviceState::getInstance().debug(logPrefix + "POST encryption enabled, encrypting content");
@@ -93,7 +93,7 @@ class ReadingsHttpUploader
         result += ", ";
 
         result += "\"readings\": [";
-    
+
         // get all sensor readings and generate appropriate HTML representation
         for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
@@ -117,25 +117,25 @@ class ReadingsHttpUploader
                 readingCounter++;
             }
         }
-        
+
         result += "]}";
 
         DeviceState::getInstance().debug(result);
-        
+
         return result;
     }
 
-	// helper method for printing array of bytes
+    // helper method for printing array of bytes
     /*
-	void printArray(String name, byte *arr, int length)
-	{
-		Serial.print(name + ": ");
-		for (int i = 0; i < length; i++)
-		{
-			Serial.write(arr[i]);
-		}
-		Serial.println();
-	}
+    void printArray(String name, byte *arr, int length)
+    {
+        Serial.print(name + ": ");
+        for (int i = 0; i < length; i++)
+        {
+            Serial.write(arr[i]);
+        }
+        Serial.println();
+    }
     */
 };
 

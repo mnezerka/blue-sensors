@@ -9,26 +9,26 @@ class Lcd: public DeviceStateListener
 {
     private:
         LiquidCrystal_I2C *lcd;
-    
+
     public:
 
     Lcd()
     {
-      // Construct an LCD object and pass it the 
+      // Construct an LCD object and pass it the
       // I2C address, width (in characters) and
       // height (in characters). Depending on the
       // Actual device, the IC2 address may change.
       lcd = new LiquidCrystal_I2C(LCD_ADDR, LCD_COLS, LCD_ROWS);
     }
-  
+
     void begin()
     {
       // initialize display
       lcd->begin();
-      //lcd->begin(0,2);      // In ESP8266-01, SDA=0, SCL=2 
+      //lcd->begin(0,2);      // In ESP8266-01, SDA=0, SCL=2
       //lcd.init();
 
-      // turn on display backlight 
+      // turn on display backlight
       lcd->backlight();
 
       // clear content
@@ -58,15 +58,15 @@ class Lcd: public DeviceStateListener
             bool readingCounter = 0;
             while (!reading->isLast)
             {
- 				lcd->setCursor(0, readingCounter);
-				lcd->print(String(i) + "-" + String(readingCounter) + ": " + String(reading->temperature) + " C");
+                lcd->setCursor(0, readingCounter);
+                lcd->print(String(i) + "-" + String(readingCounter) + ": " + String(reading->temperature) + " C");
 
                 reading++;
                 readingCounter++;
             }
         }
-        
-		lcd->noCursor();
+
+        lcd->noCursor();
     }
 
 };

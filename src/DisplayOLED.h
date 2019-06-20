@@ -17,9 +17,9 @@ class DisplayOLED: public DeviceStateListener
     private:
         // declare OLED display
         SSD1306 *oled;
-		String lastState;
-		unsigned long lastScreenChange;
-		unsigned int screen = 0;
+        String lastState;
+        unsigned long lastScreenChange;
+        unsigned int screen = 0;
 
     public:
 
@@ -33,9 +33,9 @@ class DisplayOLED: public DeviceStateListener
         // D5 -> SCL
         //oled = new SSD1306(0x3c, D5, D3);
         oled = new SSD1306(0x3c, WIRE_SCL, WIRE_SDA);
-		lastScreenChange = millis();
+        lastScreenChange = millis();
     }
-  
+
     void begin()
     {
 
@@ -49,7 +49,7 @@ class DisplayOLED: public DeviceStateListener
 
     void state(String state)
     {
-		lastState = state;
+        lastState = state;
         update();
     }
 
@@ -83,30 +83,30 @@ class DisplayOLED: public DeviceStateListener
         oled->setTextAlignment(TEXT_ALIGN_RIGHT);
         oled->drawString(128, 0, TimeProvider::getInstance().getTimeStr());
 
-		// check if screen sould be switched to next one
-		if ((millis() - lastScreenChange) > (SCREEN_DURATION * 1000))
-		{
-			screen = (screen + 1) % SCREEN_COUNT;
-			lastScreenChange = millis();
-		}
+        // check if screen sould be switched to next one
+        if ((millis() - lastScreenChange) > (SCREEN_DURATION * 1000))
+        {
+            screen = (screen + 1) % SCREEN_COUNT;
+            lastScreenChange = millis();
+        }
 
-		switch (screen)
-		{
+        switch (screen)
+        {
             // status screen
-			case 0:
-				oled->setTextAlignment(TEXT_ALIGN_LEFT);
+            case 0:
+                oled->setTextAlignment(TEXT_ALIGN_LEFT);
 
-				// device state
-				oled->drawString(0, 10, "State: " + lastState);
+                // device state
+                oled->drawString(0, 10, "State: " + lastState);
 
-				// wifi information
+                // wifi information
                 switch (WiFi.status())
                 {
                     case WL_IDLE_STATUS:
-				        oled->drawString(0, 20, "Wifi: Idle");
+                        oled->drawString(0, 20, "Wifi: Idle");
                         break;
-                    case WL_NO_SSID_AVAIL: 
-				        oled->drawString(0, 20, "Wifi: Not reachable");
+                    case WL_NO_SSID_AVAIL:
+                        oled->drawString(0, 20, "Wifi: Not reachable");
                         break;
                     case WL_CONNECTED:
                         oled->drawString(0, 20, "Wifi: " + WiFi.SSID());
@@ -114,17 +114,17 @@ class DisplayOLED: public DeviceStateListener
                         oled->drawString(0, 40, "Wifi strength: " + String(WiFi.RSSI()) + " dBm");
                         break;
                     case WL_CONNECT_FAILED:
-				        oled->drawString(0, 20, "Wifi: Wrong password");
+                        oled->drawString(0, 20, "Wifi: Wrong password");
                         break;
                     case WL_DISCONNECTED:
-				        oled->drawString(0, 20, "Wifi: No client mode");
+                        oled->drawString(0, 20, "Wifi: No client mode");
                 }
 
-				break;
+                break;
 
             // meter readings screen
-			case 1:
-				oled->setTextAlignment(TEXT_ALIGN_LEFT);
+            case 1:
+                oled->setTextAlignment(TEXT_ALIGN_LEFT);
                 oled->drawString(0, 10, "DV");
                 oled->drawString(20, 10, "SN");
                 oled->drawString(40, 10, "VAL");
@@ -149,8 +149,8 @@ class DisplayOLED: public DeviceStateListener
                 }
 
 
-				break;
-		}
+                break;
+        }
 
         oled->display();
     }

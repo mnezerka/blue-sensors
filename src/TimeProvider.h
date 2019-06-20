@@ -34,7 +34,7 @@ class TimeProvider
         // technique of deleting the methods we don't want.
         TimeProvider(TimeProvider const&) = delete;
         void operator=(TimeProvider const&)  = delete;
-      
+
     void begin()
     {
         timeClient->begin();

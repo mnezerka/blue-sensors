@@ -5,7 +5,7 @@ class Reading
 {
   public:
     static const int VALUE_NA = -8888;
-    
+
     String address;
     float temperature;
     float humidity;
