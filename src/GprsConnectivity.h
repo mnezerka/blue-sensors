@@ -10,12 +10,17 @@
 #define SIMRX 13
 #define SIMRESET 14
 
+#define BUFFERSIZE PUSH_AES_BUFFER_SIZE
+
+/*
+https://lastminuteengineers.com/sim800l-gsm-module-arduino-tutorial/
+*/
 class GprsConnectivity
 {
     private:
         SoftwareSerial *sim800;
 
-        char buffer[PUSH_AES_BUFFER_SIZE];
+        char buffer[BUFFERSIZE];
         char voltage[4];
         bool fail = false;
         bool success = false;
@@ -50,24 +55,30 @@ class GprsConnectivity
 
             communicate("AT+CSTT=\"internet\",\"\",\"\"");
 
-            communicate("AT+CIICR");
+            if (!success)
+            {
+                DeviceState::getInstance().debug("Not registered in network");
+                resetModem();
+                return;
+            }
+
+            communicate("AT+CIICR");        // starts wireless connection with the GPRS, it obtains IP addres from provider
             communicate("AT+CIPSTATUS");
-            communicate("AT+CIFSR");
-            communicate("AT+CIPSTART=\"TCP\",\"iot.pavoucek.net\",80");
+            communicate("AT+CIFSR");        // gets the ip address
+            communicate("AT+CIPSTART=\"TCP\",\"iot.pavoucek.net\",80");     // starts TCP connection
             if (!fail) delay (3000);
 
             communicate("AT");
             communicate("AT");
             communicate("AT");
-            communicate("AT+CIPQSEND=1");
+            communicate("AT+CIPQSEND=1");           // select data transmitting mode
 
+            // send data
             String request = payload(push_data);
-
             communicate("AT+CIPSEND=" + String(request.length()));
             if (!fail) {
                 delay(2000);
                 DeviceState::getInstance().debug(request);
-                //Serial.println(request);
                 sim800->print(request);
                 delay(2000);
             }
@@ -81,13 +92,18 @@ class GprsConnectivity
 
             if (fail)
             {
-                fail = false;
-                DeviceState::getInstance().debug("GDPR: Modem reset");
-                pinMode(SIMRESET, OUTPUT);
-                digitalWrite(SIMRESET, LOW);
-                delay(50);
-                pinMode(SIMRESET, INPUT_PULLUP);
+                resetModem();
             }
+        }
+
+        void resetModem()
+        {
+            fail = false;
+            DeviceState::getInstance().debug("GPRS: Modem reset");
+            pinMode(SIMRESET, OUTPUT);
+            digitalWrite(SIMRESET, LOW);
+            delay(50);
+            pinMode(SIMRESET, INPUT_PULLUP);
         }
 
         void communicate(String command)
@@ -101,9 +117,6 @@ class GprsConnectivity
         void sendCommand(String command)
         {
             DeviceState::getInstance().debug("GDPR: >>> " + command);
-
-            //Serial.print(">>> ");
-            //Serial.println(command);
             sim800->println(command);
         }
 
@@ -113,7 +126,7 @@ class GprsConnectivity
             success = false;
             char thischar = 0;
             stamp = millis();
-            byte i = 1;
+            byte i = 0;
 
             while (!sim800->available() && millis() < stamp + 5000) {
                 delay (50);
@@ -127,11 +140,14 @@ class GprsConnectivity
                 Serial.write(thischar);
 
                 buffer[i] = thischar;
-                if (buffer[i - 1] == 'O' && buffer[i] == 'K') success = true;
+
+                // check if OK was read
+                if (i > 0 && buffer[i - 1] == 'O' && buffer[i] == 'K') success = true;
+
                 if (buffer[i] == ',') comma = i;
 
                 i++;
-                if (i >= 60) i = 1;
+                if (i >= BUFFERSIZE) i = 1;
             }
 
             Serial.println();

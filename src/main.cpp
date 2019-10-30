@@ -159,8 +159,15 @@ void setup(void)
 
 //////////////////////////// LOOP /////////////////////////////
 
+int loopFirst = true;
+
 void loop(void)
 {
+    if (loopFirst) {
+        loopFirst = false;
+        takeReadings();
+    }
+
     TimeProvider::getInstance().update();
 
     t.update();
@@ -185,12 +192,12 @@ void takeReadings()
 
     serialWriter.processReadings();
 
-    //readingsHttpUploader.processReadings();
+    readingsHttpUploader.processReadings();
 
     String push_data = CommProtocol::readings2Json();
     DeviceState::getInstance().debug(push_data);
 
-    gprs.processReadings(push_data);
+    //gprs.processReadings(push_data);
 
 
 #ifdef ENABLE_LCD
