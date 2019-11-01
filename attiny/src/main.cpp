@@ -38,9 +38,11 @@ const char c10[]    PROGMEM = "AT+CIPSHUT";
 const char c11[]    PROGMEM = "AT+CSCLK=2";
 #define IX_AT_CIPSTART 12
 const char c12[]    PROGMEM = "AT+CIPSTART=\"TCP\",\"";
-const char c16[]    PROGMEM = "POST /script/measure_add.php HTTP/1.1";
+#define IX_HTTP_METHOD 16
+const char c16[]    PROGMEM = "POST ";
 #define IX_EOL 17
 const char c17[]    PROGMEM = "\r\n";
+#define IX_HTTP_HEADER_HOST 18
 const char c18[]    PROGMEM = "Host: ";
 #define IX_HTTP_HEADER_USER_AGENT 19
 const char c19[]    PROGMEM = "User-Agent: ArduinoSIM800";
@@ -50,7 +52,8 @@ const char c20[]    PROGMEM = "Connection: close";
 const char c21[]    PROGMEM = "Content-Type: application/json";
 #define IX_HTTP_HEADER_CONTENT_LENGTH 22
 const char c22[]    PROGMEM = "Content-Length: ";
-const char c23[]    PROGMEM = ">>> ";
+#define IX_HTTP_PROTOCOL 23
+const char c23[]    PROGMEM = " HTTP/1.1";
 #define IX_HTTP_BODY_DEVICE 24
 const char c24[]    PROGMEM = "{\"device\": \"";
 #define IX_HTTP_BODY_READINGS 25
@@ -90,6 +93,11 @@ DallasTemperature dallas(&ow);
 
 void prepare(byte which) {
     strcpy_P(buffer, (char *)pgm_read_word(&(string_table[which])));
+}
+
+void prepareAndSend(byte which) {
+    prepare(which);
+    Serial.print(buffer);
 }
 
 void resetModem()
@@ -205,7 +213,6 @@ void prepareBody()
 // send HTTP payload
 void sendPayload()
 {
-
     // prepare body in buffer to be able to compute
     // its length when writing HTTP Content-length header
     prepareBody();
@@ -214,25 +221,29 @@ void sendPayload()
     Serial1.println(strlen(body));
 
     // request line
-    Serial.print("POST "); Serial.print(PUSH_PATH); Serial.print(" HTTP/1.1"); prepare(IX_EOL); Serial.print(buffer);
+    prepareAndSend(IX_HTTP_METHOD);
+    Serial.print(PUSH_PATH);
+    prepareAndSend(IX_HTTP_PROTOCOL);
+    prepareAndSend(IX_EOL);
 
     // headers
-    Serial.print("Host: "); Serial.print(PUSH_HOST);  prepare(IX_EOL); Serial.print(buffer);
-    prepare(IX_HTTP_HEADER_USER_AGENT); Serial.print(buffer); prepare(IX_EOL); Serial.print(buffer);
-    prepare(IX_HTTP_HEADER_CONNECTION_CLOSE); Serial.print(buffer); prepare(IX_EOL); Serial.print(buffer);
-    prepare(IX_HTTP_HEADER_CONTENT_TYPE); Serial.print(buffer); prepare(IX_EOL); Serial.print(buffer);
-    prepare(IX_HTTP_HEADER_CONTENT_LENGTH); Serial.print(buffer);
+    prepareAndSend(IX_HTTP_HEADER_HOST); Serial.print(PUSH_HOST); prepareAndSend(IX_EOL);
+    prepareAndSend(IX_HTTP_HEADER_USER_AGENT); prepareAndSend(IX_EOL);
+    prepareAndSend(IX_HTTP_HEADER_CONNECTION_CLOSE); prepareAndSend(IX_EOL);
+    prepareAndSend(IX_HTTP_HEADER_CONTENT_TYPE); prepareAndSend(IX_EOL);
+    prepareAndSend(IX_HTTP_HEADER_CONTENT_LENGTH);
     Serial.print(strlen(body) + 4); // 4 newlines (not sure, may be 2 additional bytes would be more precise)
-    prepare(IX_EOL); Serial.print(buffer);
+    prepareAndSend(IX_EOL);
 
     // new line to separate headers and body
-    prepare(IX_EOL); Serial.print(buffer);
+    prepareAndSend(IX_EOL);
 
     /// body
     Serial.print(body);
 
     // two empty lines at the end of the body
-    prepare(IX_EOL); Serial.print(buffer);Serial.print(buffer);
+    prepareAndSend(IX_EOL);
+    prepareAndSend(IX_EOL);
 
     Serial.print(endcom);
     Serial.print(endcom);
