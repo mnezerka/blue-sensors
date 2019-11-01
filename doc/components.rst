@@ -3,7 +3,7 @@ Components
 
 Implementation of simple sensors (e.g. temperature) reader and publisher
 
-Boards 
+Boards
 ------
 
 All boards are based on ESP8266 chip.
@@ -27,7 +27,7 @@ Universal PCB board (4x6cm)
 https://www.aliexpress.com/item/5PCS-Double-side-Prototype-PCB-Tinned-Universal-board-4x6-4-6cm/32829197097.html?spm=a2g0s.9042311.0.0.3da24c4d2oyrgA
 
 
-Peripherials 
+Peripherials
 ------------
 
 This is list of supported devices that can be connected and configured via build flags.
@@ -37,15 +37,15 @@ Temperature Sensor Dallas (DS18B20)
 One Wire digital temperature sensor from Maxim IC. Reports degrees C with 9 to
 12-bit precision, measures temperature from -55C to 125C, accuracty from -10C
 to +85C is +/-0.5C. Each sensor has a unique 64-Bit Serial number etched into
-it - allows for a huge number of sensors to be used on one data bus. 
+it - allows for a huge number of sensors to be used on one data bus.
 
 https://www.aliexpress.com/item/100-New-and-original-DALLAS-DS18B20-TO-92-IC-free-shipping/1327754867.html?spm=a2g0s.9042311.0.0.1w6xrw
 
 ::
 
                _____
-              /     \   
-             /       \   
+              /     \
+             /       \
             +---------+
             |         |
             |         |
@@ -69,7 +69,7 @@ https://www.aliexpress.com/item/100-New-and-original-DALLAS-DS18B20-TO-92-IC-fre
 
 
 
-Waterproof Temperature Sensor Dallas (DS18B20) 
+Waterproof Temperature Sensor Dallas (DS18B20)
 ..............................................
 Stainless Steel Package 1 Meters Waterproof DS18b20 Temperature Probe Temperature Sensor 18B20
 https://www.aliexpress.com/item/Stainless-Steel-Package-1-Meters-Waterproof-DS18b20-Temperature-Probe-Temperature-Sensor-18B20/32359386131.html?spm=a2g0s.9042311.0.0.1w6xrw
@@ -116,8 +116,8 @@ Wiring::
                              |   |   |   |
                             GND VDD SCK SDA
                              .   .   .   .
-                             .   ................................      
-                             .       .   .                      . 
+                             .   ................................
+                             .       .   .                      .
                              ................................   .
                                      .   .                  .   .
                                      .   .                  .   .

@@ -1,7 +1,7 @@
 Wiring
 ======
 
-Example 1 - D1 Mini + Dallas + OLED 
+Example 1 - D1 Mini + Dallas + OLED
 -----------------------------------
 
 Dallas sensors are connected to D2, OLED to D3 and D4

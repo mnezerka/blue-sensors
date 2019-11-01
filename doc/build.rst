@@ -51,7 +51,7 @@ Tailor build by setting flags, e.g.::
 
     export PLATFORMIO_BUILD_FLAGS=-DENABLE_DALLAS_SENSORS
 
-Build and falsh to selected environment (`d1_mini` in our case)::
+Build and flash to selected environment (`d1_mini` in our case)::
 
     pio run -e d1_mini -t upload
 
