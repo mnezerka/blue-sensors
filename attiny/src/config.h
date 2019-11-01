@@ -11,12 +11,14 @@
 #define INTERVAL_READINGS 60
 #endif
 
-// push HOST
 #ifndef PUSH_HOST
 #define PUSH_HOST "some.domain.org"
 #endif
 
-// push PATH
+#ifndef PUSH_PORT
+#define PUSH_PORT 80
+#endif
+
 #ifndef PUSH_PATH
 #define PUSH_PATH "/path/to/handler"
 #endif
