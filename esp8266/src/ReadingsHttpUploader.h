@@ -88,21 +88,25 @@ class ReadingsHttpUploader
         result += (WiFi.RSSI());
         result += ", ";
 
+        /*
         result += "\"time\": ";
         result += TimeProvider::getInstance().getUnixTimestamp();
         result += ", ";
+        */
 
         result += "\"readings\": [";
 
         // get all sensor readings and generate appropriate HTML representation
+        int readingCounter = 0;
         for(int i = 0; i < Sensors::getInstance().getSensors()->size(); i++)
         {
             Sensor *sensor = Sensors::getInstance().getSensors()->get(i);
             Reading* reading = sensor->getReadings();
-            bool readingCounter = 0;
             while (!reading->isLast)
             {
-                if (readingCounter > 0) result += ",";
+                if (readingCounter > 0) {
+                    result += ",";
+                }
                 result += "{\"address\": \"" + reading->address + "\"";
                 if (sensor->providesTemperature())
                 {
@@ -112,8 +116,13 @@ class ReadingsHttpUploader
                 {
                     result += ", \"h\": " + String(reading->humidity);
                 }
+                if (sensor->providesPressure())
+                {
+                    result += ", \"p\": " + String(reading->pressure);
+                }
+
                 result += "}";
-                reading++;
+                reading++; // move pointer to the next reading
                 readingCounter++;
             }
         }
