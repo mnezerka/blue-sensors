@@ -1,6 +1,17 @@
+#define SDA_PORT PORTA
+#define SCL_PORT PORTA
+#define SDA_PIN 4
+#define SCL_PIN 1
+
+#define I2C_TIMEOUT 20
+#define I2C_FASTMODE 1
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
+//#include <Wire.h>
 #include "config.h"
+#include <SoftWire.h>
+#include "TinyBME280.h"
 
 #define SERBAUD 9600
 #define SIMBAUD 38400
@@ -9,6 +20,7 @@
 
 #define BUFFER_SIZE 64
 #define MAX_BODY_SIZE 255
+
 
 const char server[] PROGMEM = PUSH_HOST;
 
@@ -90,6 +102,53 @@ const int VALUE_NA = -8888;
 
 OneWire ow(DALLASPIN);
 DallasTemperature dallas(&ow);
+SoftWire swire = SoftWire();
+TinyBME280 bme = TinyBME280(&swire);
+//TinyBME280 bme = TinyBME280();
+
+void scanI2C()
+{
+    byte error, address;
+    int nDevices;
+
+    Serial1.println(F("Scanning I2C bus (7-bit addresses) ..."));
+
+    nDevices = 0;
+    for(address = 0; address < 127; address++ ) {
+
+        swire.beginTransmission(address);
+        error = swire.endTransmission();
+
+        if (error == 0) {
+
+            Serial1.print(F("I2C device found at address 0x"));
+            if (address<16) {
+                Serial1.print(F("0"));
+            }
+            Serial1.print(address,HEX);
+            Serial1.println(F("  !"));
+
+            nDevices++;
+        } else if (error==4) {
+
+           Serial1.print(F("Unknow error at address 0x"));
+
+           if (address<16) {
+                Serial1.print("0");
+           }
+           Serial1.println(address,HEX);
+        }
+    }
+
+    if (nDevices == 0) {
+        Serial1.println("No I2C devices found\n");
+    } else {
+        Serial1.println("done\n");
+    }
+
+   delay(2000);
+}
+
 
 void prepare(byte which) {
     strcpy_P(buffer, (char *)pgm_read_word(&(string_table[which])));
@@ -299,6 +358,24 @@ void gprs() {
     }
 }
 
+void readBME() {
+    timer = millis();
+
+    int32_t temperature = bme.temperature();
+    int32_t pressure = bme.pressure();
+    int32_t humidity = bme.humidity();
+    Serial1.println("--------------------");
+    Serial1.print("Temperature: ");
+    Serial1.print(temperature / 100);
+    Serial1.println(" C");
+    Serial1.print("Pressure: ");
+    Serial1.print(pressure / 100);
+    Serial1.println(" hPa");
+    Serial1.print("Humidity: ");
+    Serial1.print(humidity / 100);
+    Serial1.println(" %");
+}
+
 
 void setup() {
    endcom[0] = 0x1a;
@@ -309,10 +386,18 @@ void setup() {
 
    dallas.begin();
 
-   gprs();
+   swire.begin();
+
+   bme.begin();
+
+   //gprs();
+   readBME();
 }
 
 void loop() {
    delay(100);
-   if (millis() - timer > wait * 1000) gprs();
+   if (millis() - timer > wait * 1000) {
+       //scanI2C();
+       readBME();
+   }
 }
