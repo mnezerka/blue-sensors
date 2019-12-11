@@ -1,16 +1,7 @@
-#define SDA_PORT PORTA
-#define SCL_PORT PORTA
-#define SDA_PIN 4
-#define SCL_PIN 1
 
-#define I2C_TIMEOUT 20
-#define I2C_FASTMODE 1
-
+#include "config.h"   // needs to be included first sinc it contains some definitions for other includes (e.g. SoftWire)
 #include <OneWire.h>
 #include <DallasTemperature.h>
-//#include <Wire.h>
-#include "config.h"
-#include <SoftWire.h>
 #include "TinyBME280.h"
 
 #define SERBAUD 9600
@@ -20,7 +11,6 @@
 
 #define BUFFER_SIZE 64
 #define MAX_BODY_SIZE 255
-
 
 const char server[] PROGMEM = PUSH_HOST;
 
@@ -67,26 +57,34 @@ const char c22[]    PROGMEM = "Content-Length: ";
 #define IX_HTTP_PROTOCOL 23
 const char c23[]    PROGMEM = " HTTP/1.1";
 #define IX_HTTP_BODY_DEVICE 24
-const char c24[]    PROGMEM = "{\"device\": \"";
+const char c24[]    PROGMEM = "{\"d\":\"";
 #define IX_HTTP_BODY_READINGS 25
-const char c25[]    PROGMEM = "\",  \"readings\": [";
+const char c25[]    PROGMEM = "\",\"r\":[";
 #define IX_HTTP_BODY_READING_ADDR 26
-const char c26[]    PROGMEM = "{\"address\": \"";
+const char c26[]    PROGMEM = "{\"a\":\"";
 #define IX_HTTP_BODY_READING_TEMP 27
-const char c27[]    PROGMEM = "\", \"t\": ";
-#define IX_HTTP_BODY_READING_ADDR_END 28
-const char c28[]    PROGMEM = "";
-#define IX_HTTP_BODY_READING_END 29
-const char c29[]    PROGMEM = "}";
-#define IX_HTTP_BODY_END 30
-const char c30[]    PROGMEM = "]}";
-const char c31[]    PROGMEM = "Modem reset";
-#define IX_AT_CIPSENDQ 32
-const char c32[]    PROGMEM = "AT+CIPSEND?";
+const char c27[]    PROGMEM = "\",\"t\":";
+#define IX_HTTP_BODY_READING_PRESS 28
+const char c28[]    PROGMEM = ",\"p\":";
+#define IX_HTTP_BODY_READING_HUM 29
+const char c29[]    PROGMEM = ",\"h\":";
+#define IX_HTTP_BODY_READING_ADDR_END 30
+const char c30[]    PROGMEM = "";
+#define IX_HTTP_BODY_READING_END 31
+const char c31[]    PROGMEM = "}";
+#define IX_HTTP_BODY_END 32
+const char c32[]    PROGMEM = "]}";
+const char c33[]    PROGMEM = "Modem reset";
+#define IX_AT_CIPSENDQ 34
+const char c34[]    PROGMEM = "AT+CIPSEND?";
+#define IX_BME 35
+const char c35[]    PROGMEM = "BME";
+
 
 const char *const string_table[] PROGMEM = {c0, c1, c2, c3, c4, c5, c6,
 c7, c8, c9, c10, c11, c12, "", server, "", c16, c17, c18, c19, c20,
-c21, c22, c23, c24, c25, c26, c27, c28, c29, c30, c31, c32};
+c21, c22, c23, c24, c25, c26, c27, c28, c29, c30, c31, c32, c33, c34,
+c35};
 
 char buffer[BUFFER_SIZE];
 char body[MAX_BODY_SIZE];
@@ -100,55 +98,11 @@ const unsigned long wait = INTERVAL_READINGS;
 
 const int VALUE_NA = -8888;
 
+// initialize libraries
 OneWire ow(DALLASPIN);
 DallasTemperature dallas(&ow);
 SoftWire swire = SoftWire();
 TinyBME280 bme = TinyBME280(&swire);
-//TinyBME280 bme = TinyBME280();
-
-void scanI2C()
-{
-    byte error, address;
-    int nDevices;
-
-    Serial1.println(F("Scanning I2C bus (7-bit addresses) ..."));
-
-    nDevices = 0;
-    for(address = 0; address < 127; address++ ) {
-
-        swire.beginTransmission(address);
-        error = swire.endTransmission();
-
-        if (error == 0) {
-
-            Serial1.print(F("I2C device found at address 0x"));
-            if (address<16) {
-                Serial1.print(F("0"));
-            }
-            Serial1.print(address,HEX);
-            Serial1.println(F("  !"));
-
-            nDevices++;
-        } else if (error==4) {
-
-           Serial1.print(F("Unknow error at address 0x"));
-
-           if (address<16) {
-                Serial1.print("0");
-           }
-           Serial1.println(address,HEX);
-        }
-    }
-
-    if (nDevices == 0) {
-        Serial1.println("No I2C devices found\n");
-    } else {
-        Serial1.println("done\n");
-    }
-
-   delay(2000);
-}
-
 
 void prepare(byte which) {
     strcpy_P(buffer, (char *)pgm_read_word(&(string_table[which])));
@@ -171,46 +125,46 @@ void resetModem()
 
 void sendCommand()
 {
-   Serial1.print(">>> ");
-   Serial1.print(buffer);
-   Serial.print(buffer);
+    Serial1.print(">>> ");
+    Serial1.print(buffer);
+    Serial.print(buffer);
 
-   // modify flag just adds host name and port after current command
-   if (modify) {
+    // modify flag just adds host name and port after current command
+    if (modify) {
         Serial.print(PUSH_HOST); Serial.print("\","); Serial.print(PUSH_PORT);
-   }
+    }
 
-   Serial1.println();
-   Serial.println();
+    Serial1.println();
+    Serial.println();
 }
 
 void receiveCommand()
 {
-   unsigned long stamp;
-   success = false;
-   char thischar = 0;
-   stamp = millis();
-   byte i = 1;
+    unsigned long stamp;
+    success = false;
+    char thischar = 0;
+    stamp = millis();
+    byte i = 1;
 
-   while (!Serial.available() && millis() < stamp + 5000) {
-     delay (50);
-   }
-   if (millis() > stamp + 5000) fail = true;
-   delay (100);
+    while (!Serial.available() && millis() < stamp + 5000) {
+        delay(50);
+    }
+    if (millis() > stamp + 5000) fail = true;
+    delay(100);
 
-   while (Serial.available()) {
-     thischar = Serial.read();
-     Serial1.write(thischar);
+    while (Serial.available()) {
+        thischar = Serial.read();
+        Serial1.write(thischar);
 
-     buffer[i] = thischar;
+        buffer[i] = thischar;
 
-     // check if last chars form word "OK"
-     if (buffer[i - 1] == 'O' && buffer[i] == 'K') success = true;
+        // check if last chars form word "OK"
+        if (buffer[i - 1] == 'O' && buffer[i] == 'K') success = true;
 
-     i++;
-     if (i >= BUFFER_SIZE - 4) i = 1;
-   }
-   Serial1.println();
+        i++;
+        if (i >= BUFFER_SIZE - 4) i = 1;
+    }
+    Serial1.println();
 }
 
 void communicate(byte ix)
@@ -228,24 +182,29 @@ void prepareBody()
 {
     body[0] = '\0';
 
+    prepare(IX_HTTP_BODY_DEVICE); strcat(body, buffer);
+    strcat(body, DEVICE_ID);
+    prepare(IX_HTTP_BODY_READINGS); strcat(body, buffer);
+
+    int sensors = 0;
+
+    // DALLAS SENSORS
+
     Serial1.print("Number of dallas devices: ");
     Serial1.println(dallas.getDeviceCount());
 
     dallas.requestTemperatures();
 
-    prepare(IX_HTTP_BODY_DEVICE); strcat(body, buffer);
-    strcat(body, DEVICE_ID);
-    prepare(IX_HTTP_BODY_READINGS); strcat(body, buffer);
-
     // get all sensor readings and generate appropriate reading attributes
-    for(int i = 0; i < dallas.getDeviceCount(); i++)
+    for(sensors = 0; sensors < dallas.getDeviceCount(); sensors++)
     {
-        if (i > 1) Serial.print(",");
+        // readings delimter
+        if (sensors > 0) strcat(body, ",");
 
         DeviceAddress deviceAddress;
 
         // get unique address of sensor
-        dallas.getAddress(deviceAddress, i);
+        dallas.getAddress(deviceAddress, sensors);
 
         prepare(IX_HTTP_BODY_READING_ADDR); strcat(body, buffer);
         // get string representation of a dallas device address
@@ -259,13 +218,53 @@ void prepareBody()
         prepare(IX_HTTP_BODY_READING_TEMP); strcat(body, buffer);
 
         // get temperature
-        float temp = dallas.getTempCByIndex(i);
+        float temp = dallas.getTempCByIndex(sensors);
         if (temp == -127) temp = VALUE_NA;
         //sprintf(tmp, "%f", temp);
         dtostrf(temp, 4, 1, tmp);
         strcat(body, tmp);
         prepare(IX_HTTP_BODY_READING_END); strcat(body, buffer);
     }
+
+    // BME280
+
+    if (bme.isAvailable()) {
+
+        // readings delimter
+        if (sensors > 0) strcat(body, ",");
+
+        prepare(IX_HTTP_BODY_READING_ADDR); strcat(body, buffer);
+
+        strcat(body, DEVICE_ID);
+        prepare(IX_BME); strcat(body, buffer);
+
+
+        // get temperature
+        prepare(IX_HTTP_BODY_READING_TEMP); strcat(body, buffer);
+        int32_t val = bme.temperature();
+        float valf = val / 100.0f;
+        dtostrf(valf, 4, 1, tmp);
+        strcat(body, tmp);
+
+        // get pressure
+        prepare(IX_HTTP_BODY_READING_PRESS); strcat(body, buffer);
+        val = bme.pressure();
+        valf = val / 100.0f;
+        dtostrf(valf, 4, 1, tmp);
+        strcat(body, tmp);
+
+        // get humidity
+        prepare(IX_HTTP_BODY_READING_HUM); strcat(body, buffer);
+        val = bme.humidity();
+        valf = val / 100.0f;
+        dtostrf(valf, 4, 1, tmp);
+        strcat(body, tmp);
+        prepare(IX_HTTP_BODY_READING_END); strcat(body, buffer);
+
+    } else {
+        Serial1.println("BME280 not available");
+    }
+
     prepare(IX_HTTP_BODY_END); strcat(body, buffer);
 }
 
@@ -310,6 +309,13 @@ void sendPayload()
 
 void gprs() {
     timer = millis();
+
+    /*
+    prepareBody();
+    Serial1.println(body);
+
+    return;
+    */
 
     Serial.println("AT");
     delay(500);
@@ -358,25 +364,6 @@ void gprs() {
     }
 }
 
-void readBME() {
-    timer = millis();
-
-    int32_t temperature = bme.temperature();
-    int32_t pressure = bme.pressure();
-    int32_t humidity = bme.humidity();
-    Serial1.println("--------------------");
-    Serial1.print("Temperature: ");
-    Serial1.print(temperature / 100);
-    Serial1.println(" C");
-    Serial1.print("Pressure: ");
-    Serial1.print(pressure / 100);
-    Serial1.println(" hPa");
-    Serial1.print("Humidity: ");
-    Serial1.print(humidity / 100);
-    Serial1.println(" %");
-}
-
-
 void setup() {
    endcom[0] = 0x1a;
    endcom[1] = '\0';
@@ -385,19 +372,15 @@ void setup() {
    Serial.begin(SIMBAUD);
 
    dallas.begin();
-
    swire.begin();
-
    bme.begin();
 
-   //gprs();
-   readBME();
+   gprs();
 }
 
 void loop() {
    delay(100);
    if (millis() - timer > wait * 1000) {
-       //scanI2C();
-       readBME();
+       gprs();
    }
 }

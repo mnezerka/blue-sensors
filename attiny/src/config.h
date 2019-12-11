@@ -23,6 +23,10 @@
 #define PUSH_PATH "/path/to/handler"
 #endif
 
+#define SDA_PORT PORTA
+#define SCL_PORT PORTA
+#define SDA_PIN 4
+#define SCL_PIN 1
 
 
 #endif
