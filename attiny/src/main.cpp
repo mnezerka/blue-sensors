@@ -266,6 +266,8 @@ void prepareBody()
     }
 
     prepare(IX_HTTP_BODY_END); strcat(body, buffer);
+
+    Serial1.println(body);
 }
 
 // send HTTP payload
