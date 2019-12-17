@@ -6,14 +6,19 @@
 #include "config.h"
 #include "Sensors.h"
 #include "DeviceState.h"
-#include "TimeProvider.h"
 
-class ReadingsHttpUploader
+#ifdef ENABLE_TIME
+#include "TimeProvider.h"
+#endif
+
+class WifiHttpUploader
 {
     public:
 
     void processReadings()
     {
+        WiFiClient client;
+
         HTTPClient http;
         String url = PUSH_URL;
         String logPrefix = "[HTTP] ";
@@ -23,7 +28,7 @@ class ReadingsHttpUploader
 
         DeviceState::getInstance().debug(logPrefix + "POST to " + url);
 
-        http.begin(url);
+        http.begin(client, url);
         http.addHeader("Content-Type", "application/octet-stream");
 
         // get all readings in json format and store is as sequence of chars
@@ -88,11 +93,11 @@ class ReadingsHttpUploader
         result += (WiFi.RSSI());
         result += ", ";
 
-        /*
+#ifdef ENABLE_TIME
         result += "\"time\": ";
         result += TimeProvider::getInstance().getUnixTimestamp();
         result += ", ";
-        */
+#endif
 
         result += "\"readings\": [";
 

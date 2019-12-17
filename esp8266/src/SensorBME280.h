@@ -33,10 +33,11 @@ class SensorBME280 : public Sensor
 
             DeviceState::getInstance().state("Init BME280");
 
-            bool status = bme->begin(SENSOR_BMA280_ADDR);  
+            bool status = bme->begin(SENSOR_BMA280_ADDR);
             if (!status) {
-                DeviceState::getInstance().debug("Could not find a valid BME280 sensor, check wiring!");
+                DeviceState::getInstance().debug("No BME280 sensor found");
             } else {
+                DeviceState::getInstance().debug("Found BME280 sensor");
                 bmeCount = 1;
             }
         }
@@ -53,9 +54,9 @@ class SensorBME280 : public Sensor
                 readings[0].isLast = true;
             } else
             {
-                readings[0].address = "BMA-";
-                readings[0].address += DEVICE_ID;
-                readings[0].address += "-" + String(SENSOR_BMA280_ADDR);
+                readings[0].address = DEVICE_ID;
+                readings[0].address += "BME";
+                //readings[0].address += "-" + String(SENSOR_BMA280_ADDR);
                 readings[0].temperature = bme->readTemperature();
                 readings[0].pressure = bme->readPressure();
                 readings[0].humidity = bme->readHumidity();
