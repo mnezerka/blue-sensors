@@ -21,6 +21,8 @@ class SensorDummy: public Sensor
         readings[1].isLast = true;
     }
 
+    bool providesTemperature() { return true; };
+
     Reading* takeReadings()
     {
         readings[0].temperature = readings[0].temperature * -1;
